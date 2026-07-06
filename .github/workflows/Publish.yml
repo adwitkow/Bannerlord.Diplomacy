@@ -1,147 +1,16 @@
 name: Publish
 
 on:
-  push:
+  workflow_run:
+    workflows: ["Build"]
+    types:
+      - completed
     branches:
-      - main
-
-env:
-  # Disable the .NET logo in the console output.
-  DOTNET_NOLOGO: true
-  # Disable the .NET first time experience to skip caching NuGet packages and speed up the build.
-  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
-  # Disable sending .NET CLI telemetry to Microsoft.
-  DOTNET_CLI_TELEMETRY_OPTOUT: true
+      - 'release/**'
 
 jobs:
-  build-module:
-    name: Build Module
-    runs-on: ubuntu-latest
-    outputs:
-      mod_version: ${{ steps.changelog.outputs.mod_version }}
-      mod_description: ${{ steps.changelog.outputs.mod_description }}
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v6
-
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@master
-      with:
-        dotnet-version: 6.0.x
-
-    - name: Build Diplomacy Module
-      run: |
-        $path = $PWD.Path + '/bannerlord';
-
-        $implFX = $PWD.Path + '/bannerlord-implementationsFX';
-        $implCore = $PWD.Path + '/bannerlord-implementationsCore';
-
-        $finalFX = $path + '/Modules/Bannerlord.Diplomacy/bin/Win64_Shipping_Client/';
-        $finalCore = $path + '/Modules/Bannerlord.Diplomacy/bin/Gaming.Desktop.x64_Shipping_Client/';
-
-        $proj = 'src/Bannerlord.Diplomacy/Bannerlord.Diplomacy.csproj';
-
-        $pdllFX = $path + '/Modules/Bannerlord.Diplomacy/bin/Win64_Shipping_Client/Bannerlord.Diplomacy*.dll';
-        $ppdbFX = $path + '/Modules/Bannerlord.Diplomacy/bin/Win64_Shipping_Client/Bannerlord.Diplomacy*.pdb';
-        $pdllCore = $path + '/Modules/Bannerlord.Diplomacy/bin/Gaming.Desktop.x64_Shipping_Client/Bannerlord.Diplomacy*.dll';
-        $ppdbCore = $path + '/Modules/Bannerlord.Diplomacy/bin/Gaming.Desktop.x64_Shipping_Client/Bannerlord.Diplomacy*.pdb';
-
-        # The folders are required to be created before executing the script
-        New-Item -ItemType directory -Force -Path $path;
-        New-Item -ItemType directory -Force -Path $implFX;
-        New-Item -ItemType directory -Force -Path $implCore;
-
-        [string[]]$gameversions = Get-Content -Path supported-game-versions.txt;
-        # Process all implementations
-        For ($i = 0; $i -le $gameversions.Length - 1; $i++)
-        {
-            $gameversion = $gameversions[$i];
-            $version = $gameversion.substring(1);
-            $constgameversion = $gameversion.replace(".", "");
-            echo "::group::Build for $gameversion"
-            echo "Start building for gameversion = $gameversion"
-
-            # Main project
-            dotnet clean $proj --configuration Release;
-            dotnet build $proj --configuration Release -p:OverrideGameVersion=$gameversion -p:GameFolder="$path" -p:ConstGameVersionWithPrefix="$constgameversion";
-
-            # Copy Main project Implementations to the Implementations folder
-            Copy-Item $pdllFX $implFX/;
-            Copy-Item $ppdbFX $implFX/;
-            Copy-Item $pdllCore $implCore/;
-            Copy-Item $ppdbCore $implCore/;
-
-            echo "::endgroup::"
-        }
-        # Copy Implementations to the Module
-        Copy-Item $implFX/* $finalFX;
-        Copy-Item $implCore/* $finalCore;
-
-        # Delete Implementations folder
-        Remove-Item -Recurse $implFX;
-        Remove-Item -Recurse $implCore;
-      shell: pwsh
-
-    - name: Install and Run ChangelogParser
-      id: changelog
-      run: |
-        dotnet tool install -g Bannerlord.ChangelogParser
-        vers="$(bannerlord_changelog_parser latestversion -f "$PWD/changelog.txt")"
-        echo "::set-output name=mod_version::$vers"
-        desc="$(bannerlord_changelog_parser fulldescription -f "$PWD/changelog.txt")"
-        desc="${desc//'%'/'%25'}"
-        desc="${desc//$'"'/'%22'}"
-        desc="${desc//$'\n'/'%0A'}"
-        desc="${desc//$'\r'/'%0D'}"
-        echo "::set-output name=mod_description::$desc"
-
-    - name: Upload bannerlord folder
-      uses: actions/upload-artifact@v6
-      with:
-        name: Bannerlord.Diplomacy-${{ steps.changelog.outputs.mod_version }}
-        path: ./bannerlord/
-
-###########################
-#        NEXUSMODS        #
-###########################
-  publish-on-nexusmods:
-    needs: ["build-module"]
-    uses: BUTR/workflows/.github/workflows/release-nexusmods.yml@master
-    with:
-      nexusmods_game_id: mountandblade2bannerlord
-      nexusmods_mod_id: 832
-      mod_filename: Diplomacy
-      mod_version: ${{ needs.build-module.outputs.mod_version }}
-      mod_description: ${{ needs.build-module.outputs.mod_description }}
-      artifact_name: Bannerlord.Diplomacy
-    secrets:
-      NEXUSMODS_APIKEY: ${{ secrets.NEXUSMODS_APIKEY }}
-      NEXUSMODS_SESSION_COOKIE: ${{ secrets.NEXUSMODS_SESSION_COOKIE }}
-
-###########################
-#          STEAM          #
-###########################
-  publish-on-steam:
-    needs: ["build-module"]
-    uses: BUTR/workflows/.github/workflows/release-steam.yml@master
-    with:
-      workshop_id: 2881380744
-      mod_id: Bannerlord.Diplomacy
-      mod_description: ${{ needs.build-module.outputs.mod_description }}
-      artifact_name: Bannerlord.Diplomacy
-    secrets:
-      STEAM_LOGIN: ${{ secrets.STEAM_WORKSHOP_LOGIN }}
-      STEAM_PASSWORD: ${{ secrets.STEAM_WORKSHOP_PASSWORD }}
-      STEAM_AUTH_CODE: ${{ secrets.STEAM_WORKSHOP_AUTH_CODE }}
-
-###########################
-#         GITHUB          #
-###########################
-  publish-on-github:
-    needs: ["build-module"]
-    uses: BUTR/workflows/.github/workflows/release-github.yml@master
-    with:
-      mod_id: Bannerlord.Diplomacy
-      mod_version: ${{ needs.build-module.outputs.mod_version }}
-      mod_description: ${{ needs.build-module.outputs.mod_description }}
-      artifact_name: Bannerlord.Diplomacy
+  publish:
+    uses: adwitkow/bannerlord-workflow-templates/.github/workflows/publish.yml@master
+    permissions:
+      actions: read
+      contents: write

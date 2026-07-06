@@ -1,0 +1,13 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+      - 'release/**'
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  build:
+    uses: adwitkow/bannerlord-workflow-templates/.github/workflows/build.yml@master

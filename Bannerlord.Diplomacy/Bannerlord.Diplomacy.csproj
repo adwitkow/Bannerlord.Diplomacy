@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk;Bannerlord.BuildResourcesLite.Sdk/1.2.0.36">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ColorMinePortable" Version="2.0.4" />
+    <PackageReference Include="Bannerlord.BUTR.Shared" Version="3.0.0.142">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Bannerlord.ModuleLoader.Injector" Version="1.0.1.50" />
+    <PackageReference Include="Bannerlord.ModuleManager.Source" Version="6.0.247" />
+    <PackageReference Include="Bannerlord.ButterLib" Version="2.11.0" IncludeAssets="compile" />
+    <PackageReference Include="Bannerlord.MCM" Version="5.12.1" IncludeAssets="compile" />
+    <PackageReference Include="Lib.Harmony" Version="2.4.2" IncludeAssets="compile" />
+    <PackageReference Include="Bannerlord.UIExtenderEx" Version="2.13.2" IncludeAssets="compile" />
+    <PackageReference Include="Harmony.Extensions" Version="3.2.0.77">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+</Project>

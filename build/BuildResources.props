@@ -1,0 +1,8 @@
+<Project>
+    
+  <PropertyGroup>
+    <ModuleId>Bannerlord.Diplomacy</ModuleId>
+    <ModuleName>Diplomacy (Fork)</ModuleName>
+  </PropertyGroup>
+
+</Project>
