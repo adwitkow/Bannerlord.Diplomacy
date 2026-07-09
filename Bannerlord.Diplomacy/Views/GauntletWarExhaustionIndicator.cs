@@ -7,13 +7,11 @@ using SandBox.View.Map;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
-using TaleWorlds.MountAndBlade.View;
 using TaleWorlds.ScreenSystem;
 
 namespace Diplomacy.Views
 {
     [ViewCreatorModule]
-    [OverrideView(typeof(MapWarExhaustionIndicatorView))]
     [UsedImplicitly]
     public class GauntletWarExhaustionIndicator : MapView
     {

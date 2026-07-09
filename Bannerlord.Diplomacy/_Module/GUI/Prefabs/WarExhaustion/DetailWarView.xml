@@ -47,7 +47,7 @@
                         <ListPanel HorizontalAlignment="Left" MarginTop="10" MarginBottom="5" MarginLeft="5" MarginRight="20" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalTopToBottom" DoNotPassEventsToChildren="true">
                           <Children>
                             <TextWidget VerticalAlignment="Bottom" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="ArmyManagement.Army.Tuple.Name" Brush.TextHorizontalAlignment="Center" Text="@WarExhaustionLabel"/>
-                            <CriticalThresholdTextWidget IsCritical="@PlayerWarExhaustionIsCritical" VerticalAlignment="Bottom" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Map.WarExhaustionReport.Text" Brush.TextHorizontalAlignment="Center" Text="@PlayerWarExhaustion" />
+                            <TextWidget IsCritical="@PlayerWarExhaustionIsCritical" VerticalAlignment="Bottom" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Map.WarExhaustionReport.Text" Brush.TextHorizontalAlignment="Center" Text="@PlayerWarExhaustion" />
                             <HintWidget DataSource="{PlayerCriticaExhaustionlHint}" DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false"/>
                           </Children>
                         </ListPanel>
@@ -73,7 +73,7 @@
                         <ListPanel HorizontalAlignment="Right" MarginTop="10" MarginBottom="5" MarginLeft="20" MarginRight="5" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" StackLayout.LayoutMethod="VerticalTopToBottom" DoNotPassEventsToChildren="true">
                           <Children>
                             <TextWidget VerticalAlignment="Bottom" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="ArmyManagement.Army.Tuple.Name" Brush.TextHorizontalAlignment="Center" Text="@WarExhaustionLabel"/>
-                            <CriticalThresholdTextWidget IsCritical="@OpponentWarExhaustionIsCritical" VerticalAlignment="Bottom" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Map.WarExhaustionReport.Text" Brush.TextHorizontalAlignment="Center" Text="@OpponentWarExhaustion" />
+                            <TextWidget IsCritical="@OpponentWarExhaustionIsCritical" VerticalAlignment="Bottom" HorizontalAlignment="Center" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Brush="Map.WarExhaustionReport.Text" Brush.TextHorizontalAlignment="Center" Text="@OpponentWarExhaustion" />
                             <HintWidget DataSource="{OpponentCriticaExhaustionlHint}" DoNotAcceptEvents="true" WidthSizePolicy="CoverChildren" HeightSizePolicy="CoverChildren" Command.HoverBegin="ExecuteBeginHint" Command.HoverEnd="ExecuteEndHint" IsEnabled="false"/>
                           </Children>
                         </ListPanel>

@@ -5,7 +5,7 @@
       "executablePath": "$(GameFolder)\\bin\\Win64_Shipping_Client\\Bannerlord.exe",
       "commandLineArgs": "/singleplayer _MODULES_*Bannerlord.Harmony*Bannerlord.ButterLib*Bannerlord.UIExtenderEx*Bannerlord.MBOptionScreen*Native*SandBoxCore*Sandbox*StoryMode*CustomBattle*NavalDLC*$(ModuleId)*_MODULES_",
       "workingDirectory": "$(GameFolder)\\bin\\Win64_Shipping_Client",
-      "nativeDebugging": true
+      "debugEngines": "managed-framework"
     }
   }
 }
