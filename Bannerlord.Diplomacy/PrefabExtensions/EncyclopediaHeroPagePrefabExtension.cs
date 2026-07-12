@@ -5,7 +5,7 @@ using JetBrains.Annotations;
 
 using System.Xml;
 
-namespace Diplomacy.ViewModelMixin
+namespace Bannerlord.Diplomacy.PrefabExtensions
 {
     [PrefabExtension("EncyclopediaHeroPage", "descendant::RichTextWidget[@Text='@InformationText']")]
     [UsedImplicitly]

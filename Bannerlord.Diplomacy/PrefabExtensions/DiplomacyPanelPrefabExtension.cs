@@ -1,5 +1,4 @@
 ﻿using Bannerlord.BUTR.Shared.Helpers;
-
 using Bannerlord.UIExtenderEx.Attributes;
 using Bannerlord.UIExtenderEx.Prefabs2;
 
@@ -7,7 +6,7 @@ using JetBrains.Annotations;
 
 using System.Xml;
 
-namespace Diplomacy.ViewModelMixin
+namespace Bannerlord.Diplomacy.PrefabExtensions
 {
     [PrefabExtension("DiplomacyPanel", "descendant::Widget[@IsVisible='@Show']")]
     [UsedImplicitly]
