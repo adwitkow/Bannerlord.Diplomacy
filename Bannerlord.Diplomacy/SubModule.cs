@@ -12,7 +12,9 @@ using Microsoft.Extensions.Logging;
 
 using Serilog.Events;
 
+using System;
 using System.Linq;
+using System.Xml;
 
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
@@ -46,17 +48,11 @@ namespace Diplomacy
             base.OnSubModuleLoad();
             Instance = this;
 
-            var extender = UIExtender.Create(Name);
-            extender.Register(typeof(SubModule).Assembly);
-            extender.Enable();
-
             this.AddSerilogLoggerProvider($"{Name}.log", new[] { $"{Name}.*" }, config => config.MinimumLevel.Is(LogEventLevel.Verbose));
             Log = LogFactory.Get<SubModule>();
             Log.LogInformation($"Loading {Name} {Version}...");
 
             PatchManager.ApplyMainPatches(MainHarmonyDomain);
-
-            WidgetFactoryManager.Register(typeof(CriticalThresholdTextWidget));
         }
 
         protected override void OnSubModuleUnloaded()
@@ -72,6 +68,13 @@ namespace Diplomacy
             if (!_hasLoaded)
             {
                 _hasLoaded = true;
+
+                var extender = UIExtender.Create(Name);
+                extender.Register(typeof(SubModule).Assembly);
+                extender.Enable();
+
+                RegisterPrefabs();
+
                 Log.LogInformation($"Loaded {Name} {Version}!");
 
                 InformationManager.DisplayMessage(new InformationMessage(new TextObject($"{{=hPERH3u4}}Loaded {{NAME}}").SetTextVariable("NAME", DisplayName).ToString(), StdTextColor));
@@ -134,6 +137,117 @@ namespace Diplomacy
             {
                 //PatchManager.RemoveCampaignPatches();// Not sure we should do this...
                 Log.LogDebug("Campaign session ended.");
+            }
+        }
+
+        private void RegisterPrefabs()
+        {
+            WidgetFactoryManager.Register(typeof(CriticalThresholdTextWidget));
+
+            BrushFactoryManager.CreateAndRegister(LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Brushes.Diplomacy.xml"));
+
+            WidgetFactoryManager.CreateAndRegister(
+                "EncyclopediaFactionPageInject",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.Encyclopedia.EncyclopediaSubPages.EncyclopediaFactionPageInject.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "EncyclopediaHeroPageInject",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.Encyclopedia.EncyclopediaSubPages.EncyclopediaHeroPageInject.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "FactionButtonInject",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.Encyclopedia.EncyclopediaSubPages.FactionButtonInject.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "GrantFief",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.GrantFief.GrantFief.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "GrantFiefTuple",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.GrantFief.GrantFiefTuple.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "ClansPanel",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Clan.ClansPanel.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "DonateGold",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Clan.DonateGold.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "DiplomacyPanelButtons",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Diplomacy.DiplomacyPanelButtons.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "DiplomacyPanelCustom",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Diplomacy.DiplomacyPanelCustom.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "OverviewTab",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Diplomacy.OverviewTab.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "Relationship",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Diplomacy.Relationship.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "StatsTab",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.KingdomManagement.Diplomacy.StatsTab.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "RebelFactionDivider",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.RebelFactions.RebelFactionDivider.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "RebelFactionParticipant",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.RebelFactions.RebelFactionParticipant.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "RebelFactions",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.RebelFactions.RebelFactions.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "RebelFactionsItem",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.RebelFactions.RebelFactionsItem.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "BasicDiplomacyButton",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.Standard.BasicDiplomacyButton.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "StaticDiplomacyButton",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.Standard.StaticDiplomacyButton.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "DetailWarView",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.WarExhaustion.DetailWarView.xml"));
+            WidgetFactoryManager.CreateAndRegister(
+                "WarExhaustionMapIndicator",
+                LoadEmbeddedXml("Bannerlord.Diplomacy.GUI.Prefabs.WarExhaustion.WarExhaustionMapIndicator.xml"));
+        }
+
+        private static XmlDocument LoadEmbeddedXml(string embedPath)
+        {
+            using var stream = typeof(SubModule).Assembly.GetManifestResourceStream(embedPath);
+            using var xmlReader = XmlReader.Create(stream, new XmlReaderSettings { IgnoreComments = true });
+            var doc = new XmlDocument();
+            doc.Load(xmlReader);
+
+#if LOWER_THAN_1_4
+            FlipVerticalStacklayouts(doc.DocumentElement);
+#endif
+
+            return doc;
+        }
+
+        private static void FlipVerticalStacklayouts(XmlNode? node)
+        {
+            if (node?.Attributes is not null)
+            {
+                foreach (XmlAttribute attribute in node.Attributes)
+                {
+                    if (!attribute.Name.Equals("LayoutImp.LayoutMethod", StringComparison.Ordinal)
+                        && !attribute.Name.Equals("StackLayout.LayoutMethod", StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    if (attribute.Value.Equals("VerticalTopToBottom", StringComparison.Ordinal))
+                    {
+                        attribute.Value = "VerticalBottomToTop";
+                    }
+                    else if (attribute.Value.Equals("VerticalBottomToTop", StringComparison.Ordinal))
+                    {
+                        attribute.Value = "VerticalTopToBottom";
+                    }
+                }
+            }
+
+            foreach (XmlNode child in node.ChildNodes)
+            {
+                FlipVerticalStacklayouts(child);
             }
         }
     }

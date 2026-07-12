@@ -5,6 +5,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="GUI\Brushes\Diplomacy.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\Encyclopedia\EncyclopediaSubPages\EncyclopediaFactionPageInject.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\Encyclopedia\EncyclopediaSubPages\EncyclopediaHeroPageInject.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\Encyclopedia\EncyclopediaSubPages\FactionButtonInject.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\GrantFief\GrantFief.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\GrantFief\GrantFiefTuple.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Clan\ClansPanel.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Clan\DonateGold.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Diplomacy\DiplomacyPanelButtons.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Diplomacy\DiplomacyPanelCustom.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Diplomacy\OverviewTab.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Diplomacy\Relationship.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\KingdomManagement\Diplomacy\StatsTab.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\RebelFactions\RebelFactionDivider.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\RebelFactions\RebelFactionParticipant.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\RebelFactions\RebelFactions.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\RebelFactions\RebelFactionsItem.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\Standard\BasicDiplomacyButton.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\Standard\StaticDiplomacyButton.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\WarExhaustion\DetailWarView.xml" />
+    <EmbeddedResource Include="GUI\Prefabs\WarExhaustion\WarExhaustionMapIndicator.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ColorMinePortable" Version="2.0.4" />
     <PackageReference Include="Bannerlord.BUTR.Shared" Version="3.0.0.142">
       <PrivateAssets>all</PrivateAssets>
