@@ -29,7 +29,12 @@ namespace Diplomacy.CivilWar.Factions
         {
             var kingdomName = FactionNameGenerator.GenerateKingdomName(this);
             var newKingdom = RebelKingdom!;
+
+#if LOWER_THAN_1_5
             newKingdom.ChangeKingdomName(kingdomName, kingdomName);
+#else
+            newKingdom.ChangeKingdomName(kingdomName, kingdomName, kingdomName);
+#endif
 
             var strVars = new Dictionary<string, object>
             {

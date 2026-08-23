@@ -119,8 +119,15 @@ namespace Diplomacy.ViewModel
         private int GetEstimatedRelationValue()
         {
             var baseRelation = GetBaseRelationValueOfCurrentGoldCost();
-            var adjustedRelation = Campaign.Current.Models.DiplomacyModel.GetRelationIncreaseFactor(Hero.MainHero, _clan.Leader, baseRelation);
-            return (int) Math.Floor(adjustedRelation);
+            var diplomacyModel = Campaign.Current.Models.DiplomacyModel;
+
+#if LOWER_THAN_1_5
+            var adjustedRelation = diplomacyModel.GetRelationIncreaseFactor(Hero.MainHero, _clan.Leader, baseRelation);
+#else
+            var adjustedRelation = diplomacyModel.GetEffectiveRelationChange(Hero.MainHero, _clan.Leader, baseRelation);
+#endif
+
+            return (int)adjustedRelation;
         }
 
         private int GetCalculatingTraitFactor() => Math.Max(70 - (int) _clan.Leader.GetRelationWithPlayer(), 0) / 20 * (_clan.Tier / 2);

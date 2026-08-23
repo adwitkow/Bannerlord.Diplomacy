@@ -37,11 +37,20 @@ namespace Diplomacy.CivilWar.Actions
                 .SetTextVariable("REBELS", rebelFaction.Name)
                 .SetTextVariable("KINGDOM", rebelFaction.ParentKingdom.Name);
 
+#if LOWER_THAN_1_5
             Campaign.Current.KingdomManager.CreateKingdom(
                 rebelKingdomName,
                 rebelKingdomName,
                 rebelFaction.ParentKingdom.Culture,
                 rebelFaction.SponsorClan);
+#else
+            Campaign.Current.KingdomManager.CreateKingdom(
+                rebelKingdomName,
+                rebelKingdomName,
+                rebelFaction.ParentKingdom.Culture,
+                rebelFaction.SponsorClan,
+                rebelKingdomName);
+#endif
 
             var kingdom = Kingdom.All.FirstOrDefault(x => !x.IsEliminated && x.RulingClan == rebelFaction.SponsorClan);
             if (kingdom is null)
