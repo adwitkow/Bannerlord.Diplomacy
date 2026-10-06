@@ -49,7 +49,7 @@ namespace Diplomacy.CivilWar.Actions
                 rebelKingdomName,
                 rebelFaction.ParentKingdom.Culture,
                 rebelFaction.SponsorClan,
-                rebelKingdomName);
+                formalName: rebelKingdomName);
 #endif
 
             var kingdom = Kingdom.All.FirstOrDefault(x => !x.IsEliminated && x.RulingClan == rebelFaction.SponsorClan);
